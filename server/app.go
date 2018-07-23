@@ -3,6 +3,7 @@ package server
 import (
 	"net/http"
 
+	_ "github.com/go-xorm/xorm"
 	"github.com/gorilla/mux"
 )
 
@@ -15,6 +16,9 @@ const (
 )
 
 func init() {
+}
+
+func initXORM() {
 
 }
 

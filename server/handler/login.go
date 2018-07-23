@@ -2,11 +2,10 @@ package handler
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/joy/server/model"
-
-	"github.com/joy/server/cache"
 )
 
 func Login(w http.ResponseWriter, r *http.Request) {
@@ -16,7 +15,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	Cache.Cache.
-		// session open here
-		log.Println(credential)
+	// session open here
+	log.Println(credential)
 }
