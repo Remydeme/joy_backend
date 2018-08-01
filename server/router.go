@@ -6,7 +6,7 @@ import (
 	"errors"
 
 	"github.com/gorilla/mux"
-	"github.com/joy/handler"
+	"github.com/joy/server/handler"
 )
 
 type Route struct {

@@ -3,23 +3,36 @@ package server
 import (
 	"net/http"
 
-	_ "github.com/go-xorm/xorm"
 	"github.com/gorilla/mux"
+	"github.com/joy/server/database"
 )
 
 type App struct {
 	Router *mux.Router
 }
 
+var DB *database.DB_s
+
 const (
-	port = ":8080"
+	user     = "wisseadmin"
+	password = "Kaisershtul1996"
+	host     = "localhost"
+	port     = 5432
+	dbname   = "wisse"
+	sslmode  = "disable"
+)
+
+const (
+	server_port = ":8080"
 )
 
 func init() {
 }
 
-func initXORM() {
-
+func (a *App) initDB() error {
+	DB = new(database.DB_s)
+	err := DB.Connect_to_DB()
+	return err
 }
 
 func (a *App) initApp() error {
@@ -29,12 +42,16 @@ func (a *App) initApp() error {
 }
 
 func (a *App) Run() (bool, error) {
-	a.initCache()
+
+	if err := a.initDB(); err != nil {
+		return false, err
+	}
+
 	if err := a.initApp(); err != nil {
 		return false, err
 	}
 
-	if err := http.ListenAndServe(port, a.Router); err != nil {
+	if err := http.ListenAndServe(server_port, a.Router); err != nil {
 		return false, err
 	}
 

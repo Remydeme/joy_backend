@@ -5,11 +5,11 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/joy/server/model"
+	"github.com/joy/server"
 )
 
 func Login(w http.ResponseWriter, r *http.Request) {
-	var credential models.User
+	var credential models.Credentials
 	err := json.NewDecoder(r.Body).Decode(&credential)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -17,4 +17,5 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 	// session open here
 	log.Println(credential)
+	server.DB.AddUser(credential.Username, credential.Password)
 }
