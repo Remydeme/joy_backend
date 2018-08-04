@@ -2,20 +2,38 @@ package handler
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 
-	"github.com/joy/server"
+	"golang.org/x/crypto/bcrypt"
+
+	"github.com/joy/server/database"
+	"github.com/joy/server/model"
+)
+
+const (
+	passwordHashCost = 8
 )
 
 func Login(w http.ResponseWriter, r *http.Request) {
+
 	var credential models.Credentials
+
 	err := json.NewDecoder(r.Body).Decode(&credential)
+
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 	// session open here
-	log.Println(credential)
-	server.DB.AddUser(credential.Username, credential.Password)
+
+	// hashe the password
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(credential.Password), passwordHashCost)
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+
+	if err := database.DB.AddUser(credential.Username, hashedPassword); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+	}
 }

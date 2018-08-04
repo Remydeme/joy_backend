@@ -51,18 +51,18 @@ func (p Pathology) Id() (string, string) {
 }
 
 type Patient struct {
-	officeId          string    `json:"officeId", db:"officeId"`
-	firstname         string    `json:"firstname", db:"firstname"`
-	lastname          string    `json:"lastname", db:"lastname"`
-	sex               bool      `json:"sex", db:"sex"`
-	birth             time.Time `json:"birth", db:"birth"`
-	security          string    `json:"security", db:"security"`
-	phone             string    `json:"phone", db:"phone"`
-	city              string    `json:"city", db:"city"`
-	complement        string    `json:"complement", db:"complement"`
-	addedThe          time.Time `json:"addedThe", db:"addedThe"`
-	patient_pathology string    `json:"patient_pathology", db:"patient_pathology"`
-	lastVist          time.Time `json:"lastVist", db:"lastVist"`
+	OfficeId         string    `json:"officeId", db:"officeId"`
+	Firstname        string    `json:"firstname", db:"firstname"`
+	Lastname         string    `json:"lastname", db:"lastname"`
+	Sex              bool      `json:"sex", db:"sex"`
+	Birth            time.Time `json:"birth", db:"birth"`
+	Security         string    `json:"security", db:"security"`
+	Phone            string    `json:"phone", db:"phone"`
+	City             string    `json:"city", db:"city"`
+	Complement       string    `json:"complement", db:"complement"`
+	AddedThe         time.Time `json:"addedThe", db:"addedThe"`
+	PatientPathology string    `json:"patient_pathology", db:"patient_pathology"`
+	LastVist         time.Time `json:"lastVist", db:"lastVist"`
 }
 
 func (p Patient) Insert() string {
@@ -72,7 +72,7 @@ func (p Patient) Insert() string {
 }
 
 func (p Patient) Args() []arg {
-	return []arg{p.officeId, p.firstname, p.lastVist, p.sex, p.birth, p.security, p.phone, p.city, p.complement, p.patient_pathology, p.lastVist}
+	return []arg{p.OfficeId, p.Firstname, p.LastVist, p.Sex, p.Birth, p.Security, p.Phone, p.City, p.Complement, p.PatientPathology, p.LastVist}
 }
 
 func (p Patient) Id() (string, string) {
@@ -80,14 +80,14 @@ func (p Patient) Id() (string, string) {
 }
 
 type Owner struct {
-	id        string    `json:"id", db:"id"`
-	officeId  string    `json:"officeId", db:"officeId"`
-	lastname  string    `json:"lastname", db:"lastname"`
-	firstname string    `json:"firstname", db:"firstname"`
-	birth     time.Time `json:"birth", db:"birth"`
-	email     string    `json:"email", db:"email"`
-	upin      string    `json:"upin", db:"upin"`
-	isManager bool      `json:"isManager", db:"isManager"`
+	ID        string    `json:"id", db:"id"`
+	OfficeId  string    `json:"officeId", db:"officeId"`
+	Lastname  string    `json:"lastname", db:"lastname"`
+	Firstname string    `json:"firstname", db:"firstname"`
+	Birth     time.Time `json:"birth", db:"birth"`
+	Email     string    `json:"email", db:"email"`
+	Upin      string    `json:"upin", db:"upin"`
+	IsManager bool      `json:"isManager", db:"isManager"`
 }
 
 func (o Owner) Insert() string {
@@ -97,7 +97,7 @@ func (o Owner) Insert() string {
 }
 
 func (o Owner) Args() []arg {
-	return []arg{o.id, o.officeId, o.lastname, o.firstname, o.birth, o.email, o.upin, o.isManager}
+	return []arg{o.ID, o.OfficeId, o.Lastname, o.Firstname, o.Birth, o.Email, o.Upin, o.IsManager}
 }
 
 func (o Owner) Id() (string, string) {
@@ -105,8 +105,8 @@ func (o Owner) Id() (string, string) {
 }
 
 type Employee struct {
-	officeId string `json:"officeId", db:"officeId"`
-	ownerId  string `json:"ownerId", db:"ownerId"`
+	OfficeId string `json:"officeId", db:"officeId"`
+	OwnerId  string `json:"ownerId", db:"ownerId"`
 }
 
 func (e Employee) Insert() string {
@@ -115,7 +115,7 @@ func (e Employee) Insert() string {
 }
 
 func (e Employee) Args() []arg {
-	return []arg{e.officeId, e.ownerId}
+	return []arg{e.OfficeId, e.OwnerId}
 }
 
 func (e Employee) Id() (string, string) {
@@ -123,21 +123,21 @@ func (e Employee) Id() (string, string) {
 }
 
 type Office struct {
-	id             string `json:"id", db:"id"`
-	name           string `json:"name", db:"name"`
-	city           string `json:"city", db:"city"`
-	complement     string `json:"complement", db:"complement"`
-	owner_id       int    `json:"owner_id", db:"owner_id"`
-	number_patient int    `json:"number_patient", db:"number_patient"`
+	ID            string `json:"id" , db:"id"`
+	Name          string `json:"name" , db:"name"`
+	City          string `json:"city" , db:"city"`
+	Complement    string `json:"complement", db:"complement"`
+	OwnerId       int    `json:"ownerId", db:"ownerId"`
+	NumberPatient int    `json:"numberPatient", db:"numberPatient"`
 }
 
 func (o Office) Insert() string {
-	return `INSERT INTO office (id, name, city, complement, owner_id, number_patient) 
+	return `INSERT INTO office (id, name, city, complement, ownerId, numberPatient) 
 			VALUES ($1, $2, $3, $4, $5, $6)`
 }
 
 func (o Office) Args() []arg {
-	return []arg{o.id, o.name, o.city, o.complement, o.owner_id, o.number_patient}
+	return []arg{o.ID, o.Name, o.City, o.Complement, o.OwnerId, o.NumberPatient}
 }
 
 func (o Office) Id() (string, string) {
@@ -163,12 +163,12 @@ func (c Chef) Id() (string, string) {
 }
 
 type VisitSheet struct {
-	ownerId     string  `json:"ownerId", db:"ownerId"`
-	editedBy    string  `json:"editedBy", db:"editedBy"`
-	weight      int     `json:"weight", db:"weight"`
-	glycemia    int     `json:"glycemia", db:"glycemia"`
-	pressure    float32 `json:"pressure", db:"pressure"`
-	temperature float32 `json:"temperature", db:"temperature"`
+	OwnerId     string  `json:"ownerId", db:"ownerId"`
+	EditedBy    string  `json:"editedBy", db:"editedBy"`
+	Weight      int     `json:"weight", db:"weight"`
+	Glycemia    int     `json:"glycemia", db:"glycemia"`
+	Pressure    float32 `json:"pressure", db:"pressure"`
+	Temperature float32 `json:"temperature", db:"temperature"`
 }
 
 func (v VisitSheet) Insert() string {
@@ -177,7 +177,7 @@ func (v VisitSheet) Insert() string {
 }
 
 func (v VisitSheet) args() []arg {
-	return []arg{v.ownerId, v.editedBy, v.weight, v.glycemia, v.pressure, v.temperature}
+	return []arg{v.OwnerId, v.EditedBy, v.Weight, v.Glycemia, v.Pressure, v.Temperature}
 }
 
 func (v VisitSheet) Id() (string, string) {
@@ -185,12 +185,12 @@ func (v VisitSheet) Id() (string, string) {
 }
 
 type TimePeriod struct {
-	ownerId  string `json:"ownerId", db:"ownerId"`
-	day      string `json:"day", db:"day"`
-	time     string `json:"time", db:"time"`
-	position int    `json:"position", db:"position"`
-	fullname string `json:"fullname", db:"fullname"`
-	city     string `json:"city", db:"city"`
+	OwnerId  string `json:"ownerId", db:"ownerId"`
+	Day      string `json:"day", db:"day"`
+	Time     string `json:"time", db:"time"`
+	Position int    `json:"position", db:"position"`
+	Fullname string `json:"fullname", db:"fullname"`
+	City     string `json:"city", db:"city"`
 }
 
 func (t TimePeriod) Insert() string {
@@ -199,7 +199,7 @@ func (t TimePeriod) Insert() string {
 }
 
 func (t TimePeriod) args() []arg {
-	return []arg{t.ownerId, t.day, t.time, t.position, t.fullname, t.city}
+	return []arg{t.OwnerId, t.Day, t.Time, t.Position, t.Fullname, t.City}
 }
 
 func (t TimePeriod) Id() (string, string) {

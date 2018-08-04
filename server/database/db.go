@@ -33,6 +33,16 @@ var (
 	sql_failed_query_row = errors.New("Error while fething query")
 )
 
+var DB *DB_s
+
+func init() {
+	DB = new(DB_s)
+	err := DB.Connect_to_DB()
+	if err != nil {
+		panic(err)
+	}
+}
+
 // database class
 
 type DB_s struct {
@@ -172,9 +182,10 @@ func (database *DB_s) Add(object models.Object) error {
 		return Err_db_not_connected
 
 	}
+	arguments := []interface{string("233")}
+	if _, err := database.db_.Query(object.Insert(), arguments...); err != nil {
 
-	if _, err := database.db_.Query(object.Insert(), object.Args()); err != nil {
-
+		log.Println("errOr", err)
 		if err == sql_duplicate_key {
 
 			return db_query_failed_user_already_exist

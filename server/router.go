@@ -25,13 +25,14 @@ var (
 func init() {
 	if Routes != nil {
 		Routes["login"] = Route{Name: "Login", Path: "/login", Method: "Post", Handler: handler.Login}
-		Routes["signUp"] = Route{Name: "SignUp", Path: "/sign-up", Method: "Post", Handler: handler.SignUp}
-		Routes["create-user"] = Route{Name: "create-user", Path: "/create-user", Method: "Post", Handler: handler.CreateUser}
-		Routes["update-user"] = Route{Name: "update-user", Path: "/update-user", Method: "Post", Handler: handler.UpdateUser}
-		Routes["get-user"] = Route{Name: "get-user", Path: "/get-user", Method: "Post", Handler: handler.GetUser}
-		Routes["create-profile"] = Route{Name: "create-profile", Path: "/create-profile", Method: "Post", Handler: handler.CreateProfile}
-		Routes["update-profile"] = Route{Name: "update-profile", Path: "/update-profile", Method: "Post", Handler: handler.UpdateProfile}
-		Routes["get-profile"] = Route{Name: "get-profile", Path: "/get-profile", Method: "Post", Handler: handler.GetProfile}
+		Routes["register-user"] = Route{Name: "RegisterUser", Path: "/register-user/{id}", Method: "Post", Handler: handler.RegisterUser}
+		Routes["register-office"] = Route{Name: "RegisterOffice", Path: "/register-office", Method: "Post", Handler: handler.RegisterOffice}
+		Routes["create-user"] = Route{Name: "CreateUser", Path: "/create-user", Method: "Post", Handler: handler.CreateUser}
+		Routes["update-user"] = Route{Name: "UpdateUser", Path: "/update-user", Method: "Post", Handler: handler.UpdateUser}
+		Routes["get-user"] = Route{Name: "GetUser", Path: "/get-user", Method: "Post", Handler: handler.GetUser}
+		Routes["create-profile"] = Route{Name: "CreateProfile", Path: "/create-profile", Method: "Post", Handler: handler.CreateProfile}
+		Routes["update-profile"] = Route{Name: "UpdateProfile", Path: "/update-profile", Method: "Post", Handler: handler.UpdateProfile}
+		Routes["get-profile"] = Route{Name: "GetProfile", Path: "/get-profile", Method: "Post", Handler: handler.GetProfile}
 	}
 }
 
