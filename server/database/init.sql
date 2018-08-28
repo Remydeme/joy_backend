@@ -21,6 +21,20 @@ CREATE TABLE IF NOT EXISTS pathology(
     title VARCHAR(100) PRIMARY KEY
 );
 
+
+CREATE TABLE IF NOT EXISTS office (
+    id TEXT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    complement VARCHAR(120) NOT NULL,
+    ownerId INTEGER,
+    numberPatient INTEGER,
+    addedThe DATE DEFAULT NOW()
+);
+
+
+
+
 CREATE TABLE IF NOT EXISTS patient(
     id SERIAL PRIMARY KEY,
     officeId TEXT REFERENCES office(id),
@@ -36,18 +50,6 @@ CREATE TABLE IF NOT EXISTS patient(
     patient_pathology VARCHAR(100) REFERENCES pathology(title),
     lastVisit DATE NOT NULL
 );
-
-CREATE TABLE IF NOT EXISTS office (
-    id TEXT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    city VARCHAR(100) NOT NULL,
-    complement VARCHAR(120) NOT NULL,
-    owner_number INTEGER,
-    number_patient INTEGER,
-    addedThe DATE DEFAULT NOW()
-);
-
-
 
 CREATE TABLE IF NOT EXISTS owner(
   id TEXT PRIMARY KEY,

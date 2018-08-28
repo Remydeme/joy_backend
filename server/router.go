@@ -25,7 +25,7 @@ var (
 func init() {
 	if Routes != nil {
 		Routes["login"] = Route{Name: "Login", Path: "/login", Method: "Post", Handler: handler.Login}
-		Routes["register-user"] = Route{Name: "RegisterUser", Path: "/register-user/{id}", Method: "Post", Handler: handler.RegisterUser}
+		Routes["register-user"] = Route{Name: "RegisterUser", Path: "/register-user/{id:[A-Z0-9]+-*}", Method: "Post", Handler: handler.RegisterUser}
 		Routes["register-office"] = Route{Name: "RegisterOffice", Path: "/register-office", Method: "Post", Handler: handler.RegisterOffice}
 		Routes["create-user"] = Route{Name: "CreateUser", Path: "/create-user", Method: "Post", Handler: handler.CreateUser}
 		Routes["update-user"] = Route{Name: "UpdateUser", Path: "/update-user", Method: "Post", Handler: handler.UpdateUser}

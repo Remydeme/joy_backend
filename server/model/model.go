@@ -1,31 +1,53 @@
 package models
 
 import (
+	"log"
 	"time"
+
+	"github.com/jmoiron/sqlx"
+	"github.com/joy/server/database"
+)
+
+var (
+	insertUsers      database.Query = `INSERT INTO users(password, username) VALUES (:password, :username)`
+	insertPathology  database.Query = `INSERT INTO pathology(title) VALUES(:title)`
+	insertPatient    database.Query = `INSERT INTO patient(officeId, firstname, lastname, sex, birth, security, phone, city, complement, addedThe, paltientPathology, lastVisit) VALUES(:officeId, :firstname, :lastname, :sex, :birth, :security, :phone, :city, :complement, :addedThe, :paltientPathology, :lastVisit)`
+	insertOwner      database.Query = `INSERT INTO owner(id, officeId, lastname, firstname, birth, email, upin, isManager) VALUES(:id, :officeId, :lastname, :firstname, :birth, :email, :upin, :isManager)`
+	insertEmployee   database.Query = `INSERT INTO employee(officeId, ownerId) VALUES(:officeId, :ownerId)`
+	insertOffice     database.Query = `INSERT INTO office(id, name, city, complement, ownerid, numberpatient) VALUES(:id, :name, :city, :complement, :ownerid, :numberpatient)`
+	insertChef       database.Query = `INSERT INTO chef(officeId, chefId) VALUES(:officeId, :chefId)`
+	insertVisitSheet database.Query = `INSERT INTO visitSheet(ownerId, editedBy, weight, glycemia, pressure, temperature) VALUES(:ownerId, :editedBy, :weight, :glycemia, :pressure, :temperature)`
+	insertTimePeriod database.Query = `INSERT INTO timePeriod(ownerId, day, time, position, fullname, city) VALUES(:ownerId, :day, :time, :position, :fullname, :city)`
+)
+
+var (
+	updateUsers      database.Query = `UPDATE users SET password=:password WHERE username=:username)`
+	updatePathology  database.Query = `INSERT INTO pathology(title) VALUES(:title)`
+	updatePatient    database.Query = `INSERT INTO patient(officeId, firstname, lastname, sex, birth, security, phone, city, complement, addedThe, paltientPathology, lastVisit) VALUES(:officeId, :firstname, :lastname, :sex, :birth, :security, :phone, :city, :complement, :addedThe, :paltientPathology, :lastVisit)`
+	updateOwner      database.Query = `INSERT INTO owner(id, officeId, lastname, firstname, birth, email, upin, isManager) VALUES(:id, :officeId, :lastname, :firstname, :birth, :email, :upin, :isManager)`
+	updateEmployee   database.Query = `INSERT INTO employee(officeId, ownerId) VALUES(:officeId, :ownerId)`
+	updateOffice     database.Query = `INSERT INTO office(id, name, city, complement, ownerId, numberPatient) VALUES(:id, :name, :city, :complement, :ownerId, :numberPatient)`
+	updateChef       database.Query = `INSERT INTO chef(officeId, chefId) VALUES(:officeId, :chefId)`
+	updateVisitSheet database.Query = `INSERT INTO visitSheet(ownerId, editedBy, weight, glycemia, pressure, temperature) VALUES(:ownerId, :editedBy, :weight, :glycemia, :pressure, :temperature)`
+	updateTimePeriod database.Query = `INSERT INTO timePeriod(ownerId, day, time, position, fullname, city) VALUES(:ownerId, :day, :time, :position, :fullname, :city)`
 )
 
 type arg interface {
 }
 
-type Object interface {
-	Insert() string
-	Args() []arg
-	Id() (name string, pk string) // this function will permit to get an element of the object type
-}
-
-// structure of user for Json serialisation
-// Create a struct that models the structure of a user, both in the request body, and in the DB
 type Credentials struct {
-	Password string `json:"password", db:"password"`
-	Username string `json:"username", db:"username"`
+	Password string `database:"password"`
+	Username string `database:"username"`
 }
 
-func (c Credentials) Insert() arg {
-	return `INSERT INTO users VALUES($1, $2);`
+func (c *Credentials) Insert(tx *sqlx.Tx) error {
+	_, err := tx.NamedExec(string(insertUsers), c)
+	return err
 }
 
-func (c Credentials) Args() []arg {
-	return []arg{c.Username, c.Password}
+func (c *Credentials) Update(tx *sqlx.Tx) error {
+	_, err := tx.NamedExec(string(updateUsers), c)
+	return err
 }
 
 func (c Credentials) Id() (string, string) {
@@ -62,17 +84,13 @@ type Patient struct {
 	Complement       string    `json:"complement", db:"complement"`
 	AddedThe         time.Time `json:"addedThe", db:"addedThe"`
 	PatientPathology string    `json:"patient_pathology", db:"patient_pathology"`
-	LastVist         time.Time `json:"lastVist", db:"lastVist"`
+	LastVisit        time.Time `json:"lastVist", db:"lastVist"`
 }
 
 func (p Patient) Insert() string {
 	return `INSERT INTO patient (officeId, firstname, lastname, sex, birth, 
 								security, phone, city, complement, patient_pathology, lastVisit) 
 								VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`
-}
-
-func (p Patient) Args() []arg {
-	return []arg{p.OfficeId, p.Firstname, p.LastVist, p.Sex, p.Birth, p.Security, p.Phone, p.City, p.Complement, p.PatientPathology, p.LastVist}
 }
 
 func (p Patient) Id() (string, string) {
@@ -123,25 +141,23 @@ func (e Employee) Id() (string, string) {
 }
 
 type Office struct {
-	ID            string `json:"id" , db:"id"`
-	Name          string `json:"name" , db:"name"`
-	City          string `json:"city" , db:"city"`
-	Complement    string `json:"complement", db:"complement"`
-	OwnerId       int    `json:"ownerId", db:"ownerId"`
-	NumberPatient int    `json:"numberPatient", db:"numberPatient"`
+	ID            string `db:"id"`
+	Name          string `db:"name"`
+	City          string `db:"city"`
+	Complement    string `db:"complement"`
+	OwnerID       int    `db:"ownerid"`
+	NumberPatient int    `db:"numberpatient"`
 }
 
-func (o Office) Insert() string {
-	return `INSERT INTO office (id, name, city, complement, ownerId, numberPatient) 
-			VALUES ($1, $2, $3, $4, $5, $6)`
+func (o Office) Insert(tx *sqlx.Tx) error {
+	_, err := tx.NamedExec(string(insertOffice), o)
+	log.Println("In the insert funtion this is the error : ", err)
+	return err
 }
 
-func (o Office) Args() []arg {
-	return []arg{o.ID, o.Name, o.City, o.Complement, o.OwnerId, o.NumberPatient}
-}
-
-func (o Office) Id() (string, string) {
-	return "office", "owner_id"
+func (o *Office) Update(tx *sqlx.Tx) error {
+	_, err := tx.NamedExec(string(updateUsers), o)
+	return err
 }
 
 type Chef struct {

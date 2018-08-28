@@ -4,9 +4,6 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"golang.org/x/crypto/bcrypt"
-
-	"github.com/joy/server/database"
 	"github.com/joy/server/model"
 )
 
@@ -27,13 +24,14 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	// session open here
 
 	// hashe the password
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(credential.Password), passwordHashCost)
+	/*
+		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(credential.Password), passwordHashCost)
 
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-	}
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
 
-	if err := database.DB.AddUser(credential.Username, hashedPassword); err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-	}
+		if err := database.DB.AddUser(credential.Username, hashedPassword); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		}*/
 }
